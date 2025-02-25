@@ -2,12 +2,12 @@ import streamlit as st
 
 pages = {
     "Developing": [
-        st.Page("page1.py", title="Dataset"),
-        st.Page("page2.py", title="Developing the model"),
+        st.Page("pages/page1.py", title="Dataset"),
+        st.Page("pages/page2.py", title="Developing the model"),
     ],
     "Demo": [
-        st.Page("page3.py", title="Machine Learning"),
-        st.Page("page4.py", title="Neural Network"),
+        st.Page("pages/page3.py", title="Machine Learning"),
+        st.Page("pages/page4.py", title="Neural Network"),
     ],
 }
 

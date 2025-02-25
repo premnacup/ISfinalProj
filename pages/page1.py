@@ -17,7 +17,6 @@ st.write(
 )
 st.write("Columns Description")
 columns = df.columns
-print(columns)
 description = pd.DataFrame(
     {
         "Column Name": list(columns),
