@@ -10,8 +10,9 @@ with tabML:
         df = pd.read_csv(f)
 
     st.header("Getting the dataset")
-    text = "For the first step I'll be geting a dataset which I got the dataset from older assignment [(download here)](https://github.com/premnacup/ISfinalProj/blob/main/data/dataset.csv)."
-    st.markdown(text)
+    st.markdown(
+        "For the first step I'll be geting a dataset which I got the dataset from older assignment [(download here)](https://github.com/premnacup/ISfinalProj/blob/main/data/dataset.csv)."
+    )
     st.write(df)
     st.markdown("*this is the dataset at first glance*")
     st.write(
