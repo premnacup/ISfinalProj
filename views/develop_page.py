@@ -12,12 +12,12 @@ from sklearn.metrics import (
     confusion_matrix,
 )
 from sklearn.preprocessing import MinMaxScaler
-import matplotlib.pyplot as plt
-import seaborn as sns
 
 with open("./data/dataset.csv", "r") as f:
     df = pd.read_csv(f)
 
+dfSVM = df
+dfDT = df
 df.dropna(inplace=True)
 df["Status"] = df["Status"].map({"Y": 1, "N": 0})
 df["Gender"] = df["Gender"].map({"Male": 1, "Female": 0})
@@ -32,8 +32,10 @@ df = df.dropna()
 df.astype(int)
 
 
-tabML, tabNN = st.tabs(["Machine Learning", "Neural Network"])
-with tabML:
+tabSVM, tabDT, tabNN = st.tabs(
+    ["Machine Learning (SVM)", "Machine Learning (Decision Tree)", "Neural Network"]
+)
+with tabSVM:
     st.title("Machine Learning (SVM)")
     st.divider()
     st.header("Getting to know the algorithm first")
@@ -197,6 +199,8 @@ with tabML:
     st.write("### Confusion Matrix:")
     st.image("./model/SVM/confusionMatrix.png", use_container_width=True)
 
+with tabDT:
+    st.title("Decision Tree")
 with tabNN:
     st.title("Neural Network")
     st.divider()
