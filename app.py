@@ -9,6 +9,9 @@ pages = {
         st.Page("views/MLdemo_page.py", title="Machine Learning"),
         st.Page("views/NNdemo_page.py", title="Neural Network"),
     ],
+    "Reference": [
+        st.Page("views/reference_page.py", title="Reference"),
+    ],
 }
 
 pg = st.navigation(pages, position="sidebar")
