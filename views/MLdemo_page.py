@@ -59,7 +59,6 @@ with svmTab:
     else:
         if st.button("Generate Random Inputs"):
             random_inputs = generate_random_inputs()
-            # Store random inputs in session state
             st.session_state.random_inputs = random_inputs
         else:
             random_inputs = st.session_state.get("random_inputs", None)
@@ -188,3 +187,135 @@ with svmTab:
 
 with dtTab:
     st.header("Decision Tree Model")
+
+    model = load_model("./model/DT/DecisionTree_model.pkl")
+
+    if model is None:
+        st.error("Model could not be loaded. Please check the file path.")
+    else:
+        if st.button("Generate Random Inputs", key="generateRandomInputsDT"):
+            random_inputs = generate_random_inputs()
+            st.session_state.random_inputs = random_inputs
+        else:
+            random_inputs = st.session_state.get("random_inputs", None)
+
+        st.subheader("Personal Information")
+        gender = st.selectbox(
+            "Gender",
+            ["Male", "Female"],
+            index=0 if not random_inputs else ["Male", "Female"].index(random_inputs["Gender"]),
+            key="genderDT"
+        )
+
+        married = st.selectbox(
+            "Married",
+            ["Yes", "No"],
+            index=0 if not random_inputs else ["Yes", "No"].index(random_inputs["Married"]),
+            key="marriedDT"
+        )
+
+        dependents = st.selectbox(
+            "Dependents",
+            ["0", "1", "2", "3+"],
+            index=0 if not random_inputs else ["0", "1", "2", "3+"].index(random_inputs["Dependents"]),
+            key="dependentsDT"
+        )
+
+        graduate = st.selectbox(
+            "Education",
+            ["Graduate", "Not Graduate"],
+            index=0 if not random_inputs else ["Graduate", "Not Graduate"].index(random_inputs["Education"]),
+            key="graduateDT"
+        )
+
+        self_employed = st.selectbox(
+            "Self-Employed",
+            ["Yes", "No"],
+            index=0 if not random_inputs else ["Yes", "No"].index(random_inputs["Self_Employed"]),
+            key="self_employedDT"
+        )
+
+        st.subheader("Financial Information")
+        income = st.number_input(
+            "Income (dollars)",
+            min_value=0,
+            value=0 if not random_inputs else random_inputs["Income(dollar)"],
+            key="incomeDT"
+        )
+
+        coapplicant = st.selectbox(
+            "Co-applicant",
+            ["Yes", "No"],
+            index=0 if not random_inputs else ["Yes", "No"].index(random_inputs["Coapplicant"]),
+            key="coapplicantDT"
+        )
+
+        loan_amount = st.number_input(
+            "Loan Amount (dollars)",
+            min_value=0,
+            value=0 if not random_inputs else random_inputs["Loan_Amount"],
+            key="loan_amountDT"
+        )
+
+        loan_term = st.number_input(
+            "Loan Term (months)",
+            min_value=0,
+            max_value=480,
+            value=0 if not random_inputs else random_inputs["Term(month)"],
+            key="loan_termDT"
+        )
+
+        credit_history = st.selectbox(
+            "Credit History",
+            ["Yes", "No"],
+            index=0 if not random_inputs else ["Yes", "No"].index(random_inputs["loan_History"]),
+            key="credit_historyDT"
+        )
+
+        property_area = st.selectbox(
+            "Property Area",
+            ["Rural", "Semiurban", "Urban"],
+            index=0 if not random_inputs else ["Rural", "Semiurban", "Urban"].index(random_inputs["Area"]),
+            key="property_areaDT"
+        )
+
+        input_data = pd.DataFrame(
+            {
+                "Gender": [gender],
+                "Married": [married],
+                "Dependents": [dependents],
+                "Education": [graduate],
+                "Self_Employed": [self_employed],
+                "Income(dollar)": [income],
+                "Coapplicant": [coapplicant],
+                "Loan_Amount": [loan_amount],
+                "Term(month)": [loan_term],
+                "loan_History": [credit_history],
+                "Area": [property_area],
+            }
+        )
+
+        if st.button("Predict", use_container_width=True, key="predictDT"):
+            st.write("### Your Input Data")
+            st.dataframe(input_data, hide_index=True)
+            prediction = model.predict(preprocessInput(input_data))
+            if prediction[0] == 1:
+                st.write("### Prediction: Approved")
+            else:
+                st.write("### Prediction: Not Approved")
+
+
+        if st.button("Random Predict 5 times", use_container_width=True,key="randomPredictDT"):
+            for _ in range(5):
+                random_inputs = generate_random_inputs()
+                X_test = pd.DataFrame([random_inputs])
+                st.dataframe(X_test, hide_index=True)
+                prediction = model.predict(preprocessInput(X_test))
+                if prediction[0] == 1:
+                    st.write("### Prediction: Approved")
+                else:
+                    st.write("### Prediction: Not Approved")
+
+        if st.button("Reset Input", use_container_width=True,key="resetInputDT"):
+            st.session_state.clear()
+            st.rerun()
