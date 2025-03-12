@@ -10,20 +10,19 @@ with tabML:
         df = pd.read_csv(f)
 
     st.header("Getting the dataset")
-    st.markdown(
-        "For the first step I'll be geting a dataset which I got the dataset from older assignment [(download here)](https://github.com/premnacup/ISfinalProj/blob/main/data/dataset.csv)."
+    st.write(
+        """
+        For the first step I'll be geting a dataset which I got the dataset from older assignment.
+        \n[download here](https://github.com/premnacup/ISfinalProj/blob/main/data/dataset.csv)
+        """
     )
     st.write(df)
     st.markdown("*this is the dataset at first glance*")
     st.write(
         "This dataset is about Loan Approval, as you can see from the dataset there're some errors."
     )
-    st.markdown(
-        """
-        <h2> Columns Description </h2>
-        """,
-        unsafe_allow_html=True,
-    )
+
+    st.header("Columns Description")
     columns = df.columns
     description = pd.DataFrame(
         {
@@ -118,3 +117,105 @@ with tabML:
 with tabNN:
     st.title("Neural Network")
     st.divider()
+
+    with open("./data/dataset2.csv", "r") as f:
+        df2 = pd.read_csv(f)
+
+    st.header("Getting the dataset")
+    st.write(
+        """
+        For the first step I'll be geting a dataset which I got the dataset from kaggle.com and used AI to make the data dirty to allow data preparation and data cleaning.
+        \n[download here](https://www.kaggle.com/datasets/hasibullahaman/traffic-prediction-dataset?select=Traffic.csv)
+        """
+    )
+    st.write(df2)
+    st.markdown("*this is the dataset at first glance*")
+    st.write(
+        "This dataset is about traffic congestion, as you can see from the dataset there're some errors."
+    )
+
+    st.header("Columns Description")
+    columns_ = df2.columns
+    description_ = pd.DataFrame(
+        {
+            "Column Name": list(columns_),
+            "Description": [
+                "Time of the day when the data was recorded.",
+                "Day of the month corresponding to the recorded data.",
+                "Day of the week when the data was collected.",
+                "Number of cars counted on that particular day.",
+                "Number of bikes recorded on that day.",
+                "Number of buses observed on that day.",
+                "Number of trucks recorded on that day.",
+                "Total count of all types of vehicles combined.",
+                "Traffic situation classification for the day."
+            ],
+            "Example": [
+                str(df2[i].unique().tolist()) if df2[i].dtypes == "object" else str(df2[i].iloc[0])
+                for i in df2.columns
+            ]
+        }
+    )
+    st.dataframe(description_, hide_index=True)
+
+    st.header("Cleaning the dataset")
+    st.code(
+        """
+        # reading the dataset
+        df = pd.read_csv('../data/dataset2.csv')
+        
+        # checking the dataset columns and check for null value
+        df.columns
+        df.isnull().any()
+
+        # drop the null value
+        df.dropna(inplace = True)
+        """,
+        language="python",
+    )
+
+    st.write("After dropping the null value")
+    df2.dropna(inplace=True)
+    st.write(df2)
+
+    st.write("Encode the data and doing feature engineering")
+    st.code(
+        """
+        # prepare days and status for encoding
+        days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+        trafficStatus = ['low', 'normal', 'heavy', 'high']
+
+        # extract hour, minute, and second from df['Time] and remove the time column
+        df['Time'] = pd.to_datetime(df['Time'], format="%I:%M:%S %p")
+        df['Hour'] = df['Time'].dt.hour
+        df['Minute'] = df['Time'].dt.minute
+        df['Second'] = df['Time'].dt.second
+        df.drop(columns=['Time'], inplace=True)
+
+        # encode into the prepared value
+        df['Day of the week'] = df['Day of the week'].map(lambda x: days.index(x)).astype(int)
+        df['Traffic Situation'] = df['Traffic Situation'].map(lambda x: trafficStatus.index(x)).astype(int)
+        """
+    )
+    days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    trafficStatus = ['low', 'normal', 'heavy', 'high']
+
+    df2['Time'] = pd.to_datetime(df2['Time'], format="%I:%M:%S %p")
+    df2['Hour'] = df2['Time'].dt.hour
+    df2['Minute'] = df2['Time'].dt.minute
+    df2['Second'] = df2['Time'].dt.second
+    df2.drop(columns=['Time'], inplace=True)
+
+    df2['Day of the week'] = df2['Day of the week'].map(lambda x: days.index(x)).astype(int)
+    df2['Traffic Situation'] = df2['Traffic Situation'].map(lambda x: trafficStatus.index(x)).astype(int)
+
+    st.write("After encoding the dataset")
+    st.write(df2)
+
+    st.write(
+        "Now we can see the dataset is clean and ready to be used for training the model"
+    )
+
+
+
+
