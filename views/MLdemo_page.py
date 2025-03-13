@@ -57,11 +57,12 @@ with svmTab:
     if model is None:
         st.error("Model could not be loaded. Please check the file path.")
     else:
-        if st.button("Generate Random Inputs"):
+        if st.session_state.get("random_inputs_ML", None) is None:
             random_inputs_ML = generate_random_inputs_ML()
-            st.session_state.random_inputs_ML = random_inputs_ML
+            if st.button("Generate Random Inputs"):
+                st.session_state.random_inputs_ML = random_inputs_ML
         else:
-            random_inputs_ML = st.session_state.get("random_inputs_ML", None)
+            random_inputs_ML = st.session_state.get("random_inputs_ML", 1)
 
         st.subheader("Personal Information")
         gender = st.selectbox(
