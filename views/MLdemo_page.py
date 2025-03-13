@@ -30,7 +30,7 @@ def preprocessInput(df):
 
     return df.astype(int).values
 
-def generate_random_inputs():
+def generate_random_inputs_ML():
     return {
         "Gender": random.choice(["Male", "Female"]),
         "Married": random.choice(["Yes", "No"]),
@@ -58,44 +58,44 @@ with svmTab:
         st.error("Model could not be loaded. Please check the file path.")
     else:
         if st.button("Generate Random Inputs"):
-            random_inputs = generate_random_inputs()
-            st.session_state.random_inputs = random_inputs
+            random_inputs_ML = generate_random_inputs_ML()
+            st.session_state.random_inputs_ML = random_inputs_ML
         else:
-            random_inputs = st.session_state.get("random_inputs", None)
+            random_inputs_ML = st.session_state.get("random_inputs_ML", None)
 
         st.subheader("Personal Information")
         gender = st.selectbox(
             "Gender",
             ["Male", "Female"],
-            index=0 if not random_inputs else ["Male", "Female"].index(random_inputs["Gender"]),
+            index=0 if not random_inputs_ML else ["Male", "Female"].index(random_inputs_ML["Gender"]),
             key="gender"
         )
 
         married = st.selectbox(
             "Married",
             ["Yes", "No"],
-            index=0 if not random_inputs else ["Yes", "No"].index(random_inputs["Married"]),
+            index=0 if not random_inputs_ML else ["Yes", "No"].index(random_inputs_ML["Married"]),
             key="married"
         )
 
         dependents = st.selectbox(
             "Dependents",
             ["0", "1", "2", "3+"],
-            index=0 if not random_inputs else ["0", "1", "2", "3+"].index(random_inputs["Dependents"]),
+            index=0 if not random_inputs_ML else ["0", "1", "2", "3+"].index(random_inputs_ML["Dependents"]),
             key="dependents"
         )
 
         graduate = st.selectbox(
             "Education",
             ["Graduate", "Not Graduate"],
-            index=0 if not random_inputs else ["Graduate", "Not Graduate"].index(random_inputs["Education"]),
+            index=0 if not random_inputs_ML else ["Graduate", "Not Graduate"].index(random_inputs_ML["Education"]),
             key="graduate"
         )
 
         self_employed = st.selectbox(
             "Self-Employed",
             ["Yes", "No"],
-            index=0 if not random_inputs else ["Yes", "No"].index(random_inputs["Self_Employed"]),
+            index=0 if not random_inputs_ML else ["Yes", "No"].index(random_inputs_ML["Self_Employed"]),
             key="self_employed"
         )
 
@@ -103,21 +103,21 @@ with svmTab:
         income = st.number_input(
             "Income (dollars)",
             min_value=0,
-            value=0 if not random_inputs else random_inputs["Income(dollar)"],
+            value=0 if not random_inputs_ML else random_inputs_ML["Income(dollar)"],
             key="income"
         )
 
         coapplicant = st.selectbox(
             "Co-applicant",
             ["Yes", "No"],
-            index=0 if not random_inputs else ["Yes", "No"].index(random_inputs["Coapplicant"]),
+            index=0 if not random_inputs_ML else ["Yes", "No"].index(random_inputs_ML["Coapplicant"]),
             key="coapplicant"
         )
 
         loan_amount = st.number_input(
             "Loan Amount (dollars)",
             min_value=0,
-            value=0 if not random_inputs else random_inputs["Loan_Amount"],
+            value=0 if not random_inputs_ML else random_inputs_ML["Loan_Amount"],
             key="loan_amount"
         )
 
@@ -125,21 +125,21 @@ with svmTab:
             "Loan Term (months)",
             min_value=0,
             max_value=480,
-            value=0 if not random_inputs else random_inputs["Term(month)"],
+            value=0 if not random_inputs_ML else random_inputs_ML["Term(month)"],
             key="loan_term"
         )
 
         credit_history = st.selectbox(
             "Credit History",
             ["Yes", "No"],
-            index=0 if not random_inputs else ["Yes", "No"].index(random_inputs["loan_History"]),
+            index=0 if not random_inputs_ML else ["Yes", "No"].index(random_inputs_ML["loan_History"]),
             key="credit_history"
         )
 
         property_area = st.selectbox(
             "Property Area",
             ["Rural", "Semiurban", "Urban"],
-            index=0 if not random_inputs else ["Rural", "Semiurban", "Urban"].index(random_inputs["Area"]),
+            index=0 if not random_inputs_ML else ["Rural", "Semiurban", "Urban"].index(random_inputs_ML["Area"]),
             key="property_area"
         )
 
@@ -171,8 +171,8 @@ with svmTab:
 
         if st.button("Random Predict 5 times", use_container_width=True):
             for _ in range(5):
-                random_inputs = generate_random_inputs()
-                X_test = pd.DataFrame([random_inputs])
+                random_inputs_ML = generate_random_inputs_ML()
+                X_test = pd.DataFrame([random_inputs_ML])
                 st.dataframe(X_test, hide_index=True)
                 prediction = model.predict(preprocessInput(X_test))
                 if prediction[0] == 1:
@@ -194,44 +194,44 @@ with dtTab:
         st.error("Model could not be loaded. Please check the file path.")
     else:
         if st.button("Generate Random Inputs", key="generateRandomInputsDT"):
-            random_inputs = generate_random_inputs()
-            st.session_state.random_inputs = random_inputs
+            random_inputs_ML = generate_random_inputs_ML()
+            st.session_state.random_inputs_ML = random_inputs_ML
         else:
-            random_inputs = st.session_state.get("random_inputs", None)
+            random_inputs_ML = st.session_state.get("random_inputs_ML", None)
 
         st.subheader("Personal Information")
         gender = st.selectbox(
             "Gender",
             ["Male", "Female"],
-            index=0 if not random_inputs else ["Male", "Female"].index(random_inputs["Gender"]),
+            index=0 if not random_inputs_ML else ["Male", "Female"].index(random_inputs_ML["Gender"]),
             key="genderDT"
         )
 
         married = st.selectbox(
             "Married",
             ["Yes", "No"],
-            index=0 if not random_inputs else ["Yes", "No"].index(random_inputs["Married"]),
+            index=0 if not random_inputs_ML else ["Yes", "No"].index(random_inputs_ML["Married"]),
             key="marriedDT"
         )
 
         dependents = st.selectbox(
             "Dependents",
             ["0", "1", "2", "3+"],
-            index=0 if not random_inputs else ["0", "1", "2", "3+"].index(random_inputs["Dependents"]),
+            index=0 if not random_inputs_ML else ["0", "1", "2", "3+"].index(random_inputs_ML["Dependents"]),
             key="dependentsDT"
         )
 
         graduate = st.selectbox(
             "Education",
             ["Graduate", "Not Graduate"],
-            index=0 if not random_inputs else ["Graduate", "Not Graduate"].index(random_inputs["Education"]),
+            index=0 if not random_inputs_ML else ["Graduate", "Not Graduate"].index(random_inputs_ML["Education"]),
             key="graduateDT"
         )
 
         self_employed = st.selectbox(
             "Self-Employed",
             ["Yes", "No"],
-            index=0 if not random_inputs else ["Yes", "No"].index(random_inputs["Self_Employed"]),
+            index=0 if not random_inputs_ML else ["Yes", "No"].index(random_inputs_ML["Self_Employed"]),
             key="self_employedDT"
         )
 
@@ -239,21 +239,21 @@ with dtTab:
         income = st.number_input(
             "Income (dollars)",
             min_value=0,
-            value=0 if not random_inputs else random_inputs["Income(dollar)"],
+            value=0 if not random_inputs_ML else random_inputs_ML["Income(dollar)"],
             key="incomeDT"
         )
 
         coapplicant = st.selectbox(
             "Co-applicant",
             ["Yes", "No"],
-            index=0 if not random_inputs else ["Yes", "No"].index(random_inputs["Coapplicant"]),
+            index=0 if not random_inputs_ML else ["Yes", "No"].index(random_inputs_ML["Coapplicant"]),
             key="coapplicantDT"
         )
 
         loan_amount = st.number_input(
             "Loan Amount (dollars)",
             min_value=0,
-            value=0 if not random_inputs else random_inputs["Loan_Amount"],
+            value=0 if not random_inputs_ML else random_inputs_ML["Loan_Amount"],
             key="loan_amountDT"
         )
 
@@ -261,21 +261,21 @@ with dtTab:
             "Loan Term (months)",
             min_value=0,
             max_value=480,
-            value=0 if not random_inputs else random_inputs["Term(month)"],
+            value=0 if not random_inputs_ML else random_inputs_ML["Term(month)"],
             key="loan_termDT"
         )
 
         credit_history = st.selectbox(
             "Credit History",
             ["Yes", "No"],
-            index=0 if not random_inputs else ["Yes", "No"].index(random_inputs["loan_History"]),
+            index=0 if not random_inputs_ML else ["Yes", "No"].index(random_inputs_ML["loan_History"]),
             key="credit_historyDT"
         )
 
         property_area = st.selectbox(
             "Property Area",
             ["Rural", "Semiurban", "Urban"],
-            index=0 if not random_inputs else ["Rural", "Semiurban", "Urban"].index(random_inputs["Area"]),
+            index=0 if not random_inputs_ML else ["Rural", "Semiurban", "Urban"].index(random_inputs_ML["Area"]),
             key="property_areaDT"
         )
 
@@ -307,8 +307,8 @@ with dtTab:
 
         if st.button("Random Predict 5 times", use_container_width=True,key="randomPredictDT"):
             for _ in range(5):
-                random_inputs = generate_random_inputs()
-                X_test = pd.DataFrame([random_inputs])
+                random_inputs_ML = generate_random_inputs_ML()
+                X_test = pd.DataFrame([random_inputs_ML])
                 st.dataframe(X_test, hide_index=True)
                 prediction = model.predict(preprocessInput(X_test))
                 if prediction[0] == 1:

@@ -6,8 +6,12 @@ from datetime import datetime
 import random
 import pickle
 
-with open("./model/NN/scaler.pkl", "rb") as f:
-    scaler = pickle.load(f)
+@st.cache_resource
+def load_scaler_from_file():
+    with open("./model/NN/scaler.pkl", "rb") as f:
+        return pickle.load(f)
+
+scaler = load_scaler_from_file()
 
 def preprocessInput(data):
     data.dropna(inplace=True)
