@@ -411,7 +411,10 @@ with tabNN:
         import pickle
         from tensorflow.keras import Input
         from tensorflow.keras.models import Sequential
-        from tensorflow.keras.layers import Dense
+        from tensorflow.keras.layers import Dense, Dropout
+        from tensorflow.keras.callbacks import EarlyStopping
+        from tensorflow.keras.regularizers import l2
+        from tensorflow.keras.optimizers import Adam
         from tensorflow.keras.utils import to_categorical
         """
     )
@@ -423,38 +426,47 @@ with tabNN:
         X = df.drop(columns=['Traffic Situation'])
         y = df['Traffic Situation']
 
-        # scale the features using MinMaxScaler
+        # scale the features
         scaler = MinMaxScaler()
         X_scaled = pd.DataFrame(scaler.fit_transform(X), columns=X.columns)
-        y_one_hot = to_categorical(y, num_classes=len(trafficStatus))
+
+        # save the scaler for using in demo page
+        with open("./NN/scaler.pkl", "wb") as f:
+            pickle.dump(scaler, f)
         """
     )
 
     st.write("The next step will be splitting the dataset into training and testing set, then we can start to develop the model and save the model")
     st.code(
         """
-        # convert the target to one-hot encoding
+        # split for train and test
         X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.3, random_state=42)
         y_train = to_categorical(y_train, num_classes=4)
         y_test = to_categorical(y_test, num_classes=4)
 
-        # develop the model
+        # Dropout Layers and L2 Regularization
         model = Sequential([
             Input(shape=(X_train.shape[1],)),
-            Dense(32, activation='relu'),
-            Dense(16, activation='relu'),
+            Dense(64, activation='relu', kernel_regularizer=l2(0.01)),  # L2 regularization
+            Dropout(0.3),  # Dropout to reduce overfitting
+            Dense(32, activation='relu', kernel_regularizer=l2(0.01)),
+            Dropout(0.3),
+            Dense(16, activation='relu', kernel_regularizer=l2(0.01)),
             Dense(4, activation='softmax')
         ])
 
-        model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
-        model.summary()
+        # Optimizer and Early Stopping
+        early_stopping = EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
+
+        # Compile the model with Adam optimizer
+        model.compile(optimizer=Adam(learning_rate=0.001), loss='categorical_crossentropy', metrics=['accuracy'])
 
         history = model.fit(X_train, y_train, epochs=50, batch_size=32, validation_data=(X_test, y_test))
+        
+        model.save("./NN/NN_model.keras")
+        
         test_loss, test_acc = model.evaluate(X_test, y_test)
-
-        # save the model
-        pickle.dump(model, open('NN/NN_model.pkl', 'wb'))
         """
     )
-    st.write("The accuracy of the model is shown below (89%-90%)")
+    st.write("The accuracy of the model is shown below: ")
     st.image("./model/NN/accuracy.png", use_container_width=True)

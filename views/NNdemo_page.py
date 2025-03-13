@@ -104,6 +104,7 @@ else:
         st.write("### Your Input Data")
         st.dataframe(input_data, hide_index=True)
         
+        st.write("### Prediction Result")
         prediction = model.predict(processed_input)
         st.write(prediction)
         
