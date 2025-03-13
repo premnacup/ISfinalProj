@@ -71,9 +71,7 @@ with tabSVM:
         """,
         unsafe_allow_html=True,
     )
-    st.image(
-        "https://media.geeksforgeeks.org/wp-content/uploads/20231109124312/Hinge-loss-(2).png"
-    )
+    st.image("./views/media/SVM.png", use_container_width=True)
 
     st.header("Developing the model")
     st.write(
@@ -228,7 +226,7 @@ with tabDT:
         """,
         unsafe_allow_html=True,
     )
-    st.image("https://media.geeksforgeeks.org/wp-content/uploads/20250107141217134593/Decision-Tree.webp")
+    st.image("./views/media/DT.webp", use_container_width=True)
     st.write(
         """
         The algorithm works by creating a tree structure that represents the decision process.
@@ -395,7 +393,7 @@ with tabNN:
         Each connection between neurons in these layers has an associated weight that is adjusted during the training process to minimize the error in predictions.
         """
     )
-    st.image("https://media.geeksforgeeks.org/wp-content/uploads/20240601001059/FNN-768.jpg")
+    st.image("./views/media/FNN.jpg", use_container_width=True)
 
     st.header("Developing the model")
     st.write("After finished preparing the dataset we can now develop the model from the dataset now you can see that all features are now numerical value")
